@@ -6,20 +6,22 @@ class Job
     public JobType JobType { get; private set; }
     public JobStatus Status { get; private set; }
     public int RetryCount { get; private set; }
+    public string Payload { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
-    public Job(Guid id, JobType jobType, JobStatus status, int retryCount, DateTime createdAt)
+    public Job(Guid id, JobType jobType, JobStatus status, int retryCount, string payload, DateTime createdAt)
     {
         Id = id;
         JobType = jobType;
         Status = status;
         RetryCount = retryCount;
+        Payload = payload;
         CreatedAt = createdAt;
     }
 
-    public static Job Create(JobType jobType)
+    public static Job Create(JobType jobType, string payload)
     {
-        return new Job(Guid.NewGuid(), jobType, JobStatus.Pending, 0, DateTime.UtcNow);
+        return new Job(Guid.NewGuid(), jobType, JobStatus.Pending, 0, payload, DateTime.UtcNow);
     }
 
     public void Process()
