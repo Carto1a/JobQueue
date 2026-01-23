@@ -1,6 +1,6 @@
 namespace JobQueue.Domain;
 
-class Job
+public class Job
 {
     public Guid Id { get; private set; }
     public JobType JobType { get; private set; }

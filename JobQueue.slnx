@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/JobQueue.Application/JobQueue.Application.csproj" />
     <Project Path="src/JobQueue.Domain/JobQueue.Domain.csproj" />
   </Folder>
 </Solution>
