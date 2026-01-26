@@ -2,5 +2,9 @@
   <Folder Name="/src/">
     <Project Path="src/JobQueue.Application/JobQueue.Application.csproj" />
     <Project Path="src/JobQueue.Domain/JobQueue.Domain.csproj" />
+    <Project Path="src/JobQueue.Infrastructure/JobQueue.Infrastructure.csproj" />
+    <Project Path="src/JobQueue.Api/JobQueue.Api.csproj" />
+    <Project Path="src/JobQueue.Worker/JobQueue.Worker.csproj" />
+    <Project Path="src/JobQueue.Dispatcher/JobQueue.Dispatcher.csproj" />
   </Folder>
 </Solution>
