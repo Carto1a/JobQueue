@@ -1,6 +1,6 @@
 @JobQueue.Api_HostAddress = http://localhost:5278
 
-GET {{JobQueue.Api_HostAddress}}/weatherforecast/
+GET {{JobQueue.Api_HostAddress}}/jobs/
 Accept: application/json
 
 ###

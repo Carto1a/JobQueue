@@ -1,20 +1,26 @@
+using JobQueue.Api;
+using JobQueue.Application;
+using JobQueue.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+builder.Services.InjectInfrastructure(builder.Configuration);
+builder.Services.InjectUseCases();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
+await app.InitializeDb();
+
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthorization();
 

@@ -1,13 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
-
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
   </ItemGroup>
-
+  <ItemGroup>
+      <ProjectReference Include="../JobQueue.Domain/JobQueue.Domain.csproj" />
+      <ProjectReference Include="../JobQueue.Application/JobQueue.Application.csproj" />
+      <ProjectReference Include="../JobQueue.Infrastructure/JobQueue.Infrastructure.csproj" />
+  </ItemGroup>
 </Project>
