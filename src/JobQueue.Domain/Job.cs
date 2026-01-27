@@ -50,10 +50,12 @@ public class Job
         Status = JobStatus.Pending;
     }
 
+    public bool CanRetry() => Status == JobStatus.Pending;
+
     private void EnsureStatus(JobStatus expected)
     {
         if (Status != expected)
-            throw new Exception($"Invalid state. Expected {expected}, current {Status}");
+            throw new InvalidJobStateException(expected, Status);
     }
 
     private int GetMaxAttempts()

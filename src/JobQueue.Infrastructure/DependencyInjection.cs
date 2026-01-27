@@ -49,7 +49,8 @@ public static class DependencyInjection
                 HostName = settings.Host,
                 Port = settings.Port,
                 UserName = settings.Username,
-                Password = settings.Password
+                Password = settings.Password,
+                ConsumerDispatchConcurrency = settings.DispatchConcurrency
             };
 
             return factory.CreateConnectionAsync().GetAwaiter().GetResult();

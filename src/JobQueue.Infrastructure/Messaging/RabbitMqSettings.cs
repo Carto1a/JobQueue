@@ -6,4 +6,5 @@ public record RabbitMqSettings
     public int Port { get; init; }
     public string Username { get; init; } = default!;
     public string Password { get; init; } = default!;
+    public ushort DispatchConcurrency { get; init; } = 1;
 }
