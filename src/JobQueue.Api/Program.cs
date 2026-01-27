@@ -4,6 +4,7 @@ using JobQueue.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddLogging(builder => builder.AddConsole());
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.InjectInfrastructure(builder.Configuration);
