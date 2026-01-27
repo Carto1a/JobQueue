@@ -24,7 +24,7 @@ public class CreateJobHandler(
         // NOTE: seria melhor usar domain event para não deixar acoplado
         try
         {
-            await _publisher.Publish(job.Id);
+            await _publisher.PublishJob(job.Id);
         }
         catch (Exception exception)
         {

@@ -2,5 +2,5 @@ namespace JobQueue.Application;
 
 public interface IQueuePublisher
 {
-    Task Publish(Guid id);
+    Task PublishJob(Guid id);
 }
