@@ -7,6 +7,7 @@ using JobQueue.Application;
 using JobQueue.Infrastructure.Processors;
 using RabbitMQ.Client;
 using JobQueue.Infrastructure.Messaging;
+using MongoDB.Driver;
 
 namespace JobQueue.Infrastructure;
 
@@ -22,12 +23,17 @@ public static class DependencyInjection
         services.AddSingleton(sp =>
         {
             var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-
-            if (string.IsNullOrWhiteSpace(settings.ConnectionString))
-                throw new InvalidOperationException("MongoDb:ConnectionString not configured");
-
-            return new MongoDbContext(settings);
+            return new MongoClient(settings.ConnectionString);
         });
+
+        services.AddSingleton(sp =>
+        {
+            var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
+            var client = sp.GetRequiredService<MongoClient>();
+            return new MongoDbContext(client, settings);
+        });
+
+        services.AddSingleton<MongoInitializer>();
 
         services.AddScoped<IJobRepository, JobRepository>();
 
