@@ -1,8 +1,9 @@
 namespace JobQueue.Infrastructure.Messaging;
 
-public record RabbitMqSettings(
-    string Host,
-    int Port,
-    string QueueName,
-    string Username,
-    string Password);
+public record RabbitMqSettings
+{
+    public string Host { get; init; } = default!;
+    public int Port { get; init; }
+    public string Username { get; init; } = default!;
+    public string Password { get; init; } = default!;
+}

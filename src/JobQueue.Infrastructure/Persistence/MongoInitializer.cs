@@ -1,12 +1,13 @@
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace JobQueue.Infrastructure.Persistence;
 
-public class MongoInitializer(MongoClient client, MongoDbSettings settings)
+public class MongoInitializer(MongoClient client, IOptions<MongoDbSettings> settings)
 {
     private const string JobsCollectionName = "jobs";
 
-    private readonly IMongoDatabase _database = client.GetDatabase(settings.DatabaseName);
+    private readonly IMongoDatabase _database = client.GetDatabase(settings.Value.DatabaseName);
 
     public async Task Init()
     {

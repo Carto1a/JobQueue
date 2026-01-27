@@ -2,7 +2,11 @@ using MongoDB.Driver;
 
 namespace JobQueue.Infrastructure.Persistence;
 
-public record MongoDbSettings(string ConnectionString, string DatabaseName);
+public record MongoDbSettings
+{
+    public string ConnectionString { get; init; } = default!;
+    public string DatabaseName { get; init; } = default!;
+}
 
 public class MongoDbContext(MongoClient client, MongoDbSettings settings)
 {
