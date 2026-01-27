@@ -1,0 +1,76 @@
+services:
+  backend:
+    image: jobsqueue-api
+    build:
+      context: ./src/
+      dockerfile: JobQueue.Api/dockerfile
+    ports:
+      - "8081:8080"
+    networks:
+      - jobs-network
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      MongoDb__ConnectionString: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@db:27017/${MONGO_DATABASE}?authSource=admin"
+      MongoDb__DatabaseName: ${MONGO_DATABASE}
+
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Port: 5672
+      RabbitMq__Username: ${RABBITMQ_USERNAME}
+      RabbitMq__Password: ${RABBITMQ_PASSWORD}
+
+    # restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:management
+    hostname: rabbitmq
+    networks:
+      - jobs-network
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USERNAME}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: /
+    volumes:
+      - rabbitmq-lib:/var/lib/rabbitmq/
+      - rabbitmq-log:/var/log/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  db:
+    image: mongo:latest
+    container_name: jobsqueue-db
+    environment:
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    ports:
+      - "27017:27017"
+    restart: unless-stopped
+    networks:
+      - jobs-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  rabbitmq-lib:
+  rabbitmq-log:
+  mongo_data:
+
+networks:
+  jobs-network:
+    driver: bridge

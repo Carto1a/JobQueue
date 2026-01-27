@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+COPY JobQueue.Api/JobQueue.Api.csproj JobQueue.Api/
+COPY JobQueue.Application/JobQueue.Application.csproj JobQueue.Application/
+COPY JobQueue.Domain/JobQueue.Domain.csproj JobQueue.Domain/
+COPY JobQueue.Infrastructure/JobQueue.Infrastructure.csproj JobQueue.Infrastructure/
+
+RUN dotnet restore JobQueue.Api/JobQueue.Api.csproj
+
+COPY . .
+WORKDIR /src/JobQueue.Api
+RUN dotnet publish -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+WORKDIR /app
+
+COPY --from=build /app/publish .
+
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+
+ENTRYPOINT ["dotnet", "JobQueue.Api.dll"]
