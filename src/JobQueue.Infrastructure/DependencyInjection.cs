@@ -3,6 +3,8 @@ using JobQueue.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
+using JobQueue.Application;
+using JobQueue.Infrastructure.Processors;
 
 namespace JobQueue.Infrastructure;
 
@@ -25,6 +27,9 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IJobRepository, JobRepository>();
+
+        services.AddScoped<IJobProcessor, EmailJobProcessor>();
+        services.AddScoped<IJobProcessor, ReportJobProcessor>();
 
         return services;
     }

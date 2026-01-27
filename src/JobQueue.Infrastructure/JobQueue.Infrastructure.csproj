@@ -13,5 +13,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\JobQueue.Domain\JobQueue.Domain.csproj" />
+    <ProjectReference Include="../JobQueue.Application/JobQueue.Application.csproj" />
   </ItemGroup>
 </Project>
