@@ -3,19 +3,11 @@ using Microsoft.Extensions.Logging;
 
 namespace JobQueue.Application;
 
-public enum ProcessResult
-{
-    Completed,
-    Failed,
-    Retry,
-    NotFound
-}
-
 public class ProcessJobHandler(
     IJobRepository repository,
     JobProcessorResolver resolver,
     ILogger<ProcessJobHandler> logger
-)
+) : IProcessJobHandler
 {
     private readonly IJobRepository _repository = repository;
     private readonly JobProcessorResolver _resolver = resolver;

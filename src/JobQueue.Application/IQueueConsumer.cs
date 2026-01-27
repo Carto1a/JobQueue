@@ -2,5 +2,5 @@ namespace JobQueue.Application;
 
 public interface IQueueConsumer
 {
-    Task ConsumeJobs(CancellationToken cancellationToken = default);
+    Task ConsumeJobs(IProcessJobHandler handler, CancellationToken cancellationToken = default);
 }

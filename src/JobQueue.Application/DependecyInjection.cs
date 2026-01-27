@@ -7,7 +7,7 @@ public static class DependecyInjection
     public static IServiceCollection InjectUseCases(this IServiceCollection services)
     {
         services.AddScoped<CreateJobHandler>();
-        services.AddScoped<ProcessJobHandler>();
+        services.AddScoped<IProcessJobHandler, ProcessJobHandler>();
 
         return services;
     }

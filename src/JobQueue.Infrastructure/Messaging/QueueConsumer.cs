@@ -7,21 +7,19 @@ namespace JobQueue.Infrastructure.Messaging;
 
 public class QueueConsumer(
     IConnection connection,
-    ILogger<QueueConsumer> logger,
-    ProcessJobHandler handler
+    ILogger<QueueConsumer> logger
 ) : IQueueConsumer
 {
     private readonly IConnection _connection = connection;
     private readonly ILogger<QueueConsumer> _logger = logger;
-    private readonly ProcessJobHandler _handler = handler;
 
-    public async Task ConsumeJobs(CancellationToken cancellationToken = default)
+    public async Task ConsumeJobs(IProcessJobHandler handler, CancellationToken cancellationToken = default)
     {
         var channel = await _connection.CreateChannelAsync(cancellationToken: cancellationToken);
 
         try
         {
-            await SetupConsumer(channel, cancellationToken);
+            await SetupConsumer(handler, channel, cancellationToken);
         }
         catch (OperationCanceledException)
         {
@@ -36,7 +34,7 @@ public class QueueConsumer(
         }
     }
 
-    private async Task SetupConsumer(IChannel channel, CancellationToken cancellationToken)
+    private async Task SetupConsumer(IProcessJobHandler handler, IChannel channel, CancellationToken cancellationToken)
     {
         const string queueName = "jobs";
 
@@ -73,7 +71,7 @@ public class QueueConsumer(
                     return;
                 }
 
-                var result = await _handler.Handle(id, cancellationToken);
+                var result = await handler.Handle(id, cancellationToken);
                 switch (result)
                 {
                     case ProcessResult.Completed:

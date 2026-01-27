@@ -57,6 +57,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IQueuePublisher, QueuePublisher>();
+        services.AddScoped<IQueueConsumer, QueueConsumer>();
 
         return services;
     }
