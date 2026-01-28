@@ -1,5 +1,4 @@
 using System.Text;
-using System.Text.Json;
 using JobQueue.Application;
 using RabbitMQ.Client;
 
@@ -13,14 +12,13 @@ public class QueuePublisher(IRabbitMqChannelFactory factory) : IQueuePublisher
     {
         using var channel = await _factory.CreateConsumerChannel(QueueName.Jobs);
 
-        var message = JsonSerializer.Serialize(new { Id = id });
+        var body = Encoding.UTF8.GetBytes(id.ToString());
+
         var props = new BasicProperties
         {
             Persistent = true,
-            ContentType = "application/json"
+            ContentType = "text/plain"
         };
-
-        var body = Encoding.UTF8.GetBytes(message);
 
         await channel.BasicPublishAsync(
             "",
