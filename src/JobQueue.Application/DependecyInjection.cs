@@ -1,3 +1,6 @@
+using JobQueue.Application.Abstractions;
+using JobQueue.Application.Commands;
+using JobQueue.Application.Queries;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace JobQueue.Application;

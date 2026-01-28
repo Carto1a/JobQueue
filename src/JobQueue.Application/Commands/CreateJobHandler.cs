@@ -1,7 +1,8 @@
+using JobQueue.Application.Abstractions;
 using JobQueue.Domain;
 using Microsoft.Extensions.Logging;
 
-namespace JobQueue.Application;
+namespace JobQueue.Application.Commands;
 
 public record CreateJobCommand(JobType JobType, string Payload);
 

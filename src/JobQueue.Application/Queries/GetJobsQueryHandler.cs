@@ -1,4 +1,6 @@
-namespace JobQueue.Application;
+using JobQueue.Application.Abstractions;
+
+namespace JobQueue.Application.Queries;
 
 public class GetJobsQueryHandler(IQueries queries)
 {

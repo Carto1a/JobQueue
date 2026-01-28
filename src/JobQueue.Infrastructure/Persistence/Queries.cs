@@ -1,4 +1,5 @@
-using JobQueue.Application;
+using JobQueue.Application.Abstractions;
+using JobQueue.Application.Queries;
 using MongoDB.Driver;
 
 namespace JobQueue.Infrastructure.Persistence;

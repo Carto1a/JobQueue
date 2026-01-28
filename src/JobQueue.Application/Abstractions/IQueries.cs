@@ -1,4 +1,6 @@
-namespace JobQueue.Application;
+using JobQueue.Application.Queries;
+
+namespace JobQueue.Application.Abstractions;
 
 public interface IQueries
 {

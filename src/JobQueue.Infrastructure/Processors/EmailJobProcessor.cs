@@ -1,4 +1,4 @@
-using JobQueue.Application;
+using JobQueue.Application.Abstractions;
 using JobQueue.Domain;
 
 namespace JobQueue.Infrastructure.Processors;

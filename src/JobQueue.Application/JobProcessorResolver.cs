@@ -1,3 +1,4 @@
+using JobQueue.Application.Abstractions;
 using JobQueue.Domain;
 
 namespace JobQueue.Application;

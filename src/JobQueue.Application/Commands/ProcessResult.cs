@@ -1,4 +1,4 @@
-namespace JobQueue.Application;
+namespace JobQueue.Application.Commands;
 
 public enum ProcessResult
 {

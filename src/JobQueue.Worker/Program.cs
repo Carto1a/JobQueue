@@ -1,4 +1,6 @@
 using JobQueue.Application;
+using JobQueue.Application.Abstractions;
+using JobQueue.Application.Commands;
 using JobQueue.Infrastructure;
 using JobQueue.Worker;
 

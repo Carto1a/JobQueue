@@ -1,4 +1,4 @@
-using JobQueue.Application;
+using JobQueue.Application.Commands;
 using JobQueue.Dispatcher;
 using JobQueue.Infrastructure;
 

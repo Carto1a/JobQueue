@@ -1,4 +1,6 @@
-namespace JobQueue.Application;
+using JobQueue.Application.Commands;
+
+namespace JobQueue.Application.Abstractions;
 
 public interface IProcessJobHandler
 {

@@ -1,4 +1,4 @@
-using JobQueue.Application;
+using JobQueue.Application.Abstractions;
 
 namespace JobQueue.Worker;
 

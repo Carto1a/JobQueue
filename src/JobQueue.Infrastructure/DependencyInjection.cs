@@ -3,11 +3,11 @@ using JobQueue.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
-using JobQueue.Application;
 using JobQueue.Infrastructure.Processors;
 using RabbitMQ.Client;
 using JobQueue.Infrastructure.Messaging;
 using MongoDB.Driver;
+using JobQueue.Application.Abstractions;
 
 namespace JobQueue.Infrastructure;
 

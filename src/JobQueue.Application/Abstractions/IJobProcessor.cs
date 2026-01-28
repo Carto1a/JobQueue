@@ -1,6 +1,6 @@
 using JobQueue.Domain;
 
-namespace JobQueue.Application;
+namespace JobQueue.Application.Abstractions;
 
 public interface IJobProcessor
 {

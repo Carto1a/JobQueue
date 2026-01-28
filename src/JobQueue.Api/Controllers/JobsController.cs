@@ -1,4 +1,5 @@
-using JobQueue.Application;
+using JobQueue.Application.Commands;
+using JobQueue.Application.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JobQueue.Api.Controllers;

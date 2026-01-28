@@ -1,5 +1,5 @@
 using System.Text;
-using JobQueue.Application;
+using JobQueue.Application.Abstractions;
 using RabbitMQ.Client;
 
 namespace JobQueue.Infrastructure.Messaging;

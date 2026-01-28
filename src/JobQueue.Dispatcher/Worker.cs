@@ -1,4 +1,5 @@
-using JobQueue.Application;
+using JobQueue.Application.Abstractions;
+using JobQueue.Application.Commands;
 
 namespace JobQueue.Dispatcher;
 

@@ -1,5 +1,6 @@
 using System.Text;
-using JobQueue.Application;
+using JobQueue.Application.Abstractions;
+using JobQueue.Application.Commands;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;

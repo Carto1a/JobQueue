@@ -1,6 +1,6 @@
 using JobQueue.Domain;
 
-namespace JobQueue.Application;
+namespace JobQueue.Application.Queries;
 
 public record GetJobQueryResponse(
     Guid Id,
