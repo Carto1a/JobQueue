@@ -110,12 +110,6 @@ public class QueueConsumer(
             consumer,
             cancellationToken);
 
-        cancellationToken.Register(async () =>
-        {
-            _logger.LogInformation("Cancelling RabbitMQ consumer");
-            await channel.BasicCancelAsync(consumerTag);
-        });
-
         await Task.Delay(Timeout.Infinite, cancellationToken);
     }
 }
