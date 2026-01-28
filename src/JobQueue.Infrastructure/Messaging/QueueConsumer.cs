@@ -1,3 +1,4 @@
+using System.Text;
 using JobQueue.Application;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -6,16 +7,16 @@ using RabbitMQ.Client.Events;
 namespace JobQueue.Infrastructure.Messaging;
 
 public class QueueConsumer(
-    IConnection connection,
+    IRabbitMqChannelFactory factory,
     ILogger<QueueConsumer> logger
 ) : IQueueConsumer
 {
-    private readonly IConnection _connection = connection;
+    private readonly IRabbitMqChannelFactory _factory = factory;
     private readonly ILogger<QueueConsumer> _logger = logger;
 
     public async Task ConsumeJobs(IProcessJobHandler handler, CancellationToken cancellationToken = default)
     {
-        var channel = await _connection.CreateChannelAsync(cancellationToken: cancellationToken);
+        var channel = await _factory.CreateConsumerChannel(QueueName.Jobs);
 
         try
         {
@@ -36,15 +37,6 @@ public class QueueConsumer(
 
     private async Task SetupConsumer(IProcessJobHandler handler, IChannel channel, CancellationToken cancellationToken)
     {
-        const string queueName = "jobs";
-
-        await channel.BasicQosAsync(
-            prefetchSize: 0,
-            prefetchCount: 1,
-            global: false,
-            cancellationToken
-        );
-
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.ReceivedAsync += async (ch, ea) =>
         {
@@ -54,14 +46,20 @@ public class QueueConsumer(
                 return;
             }
 
+            var rawMessage = Encoding.UTF8.GetString(ea.Body.Span);
+
             try
             {
-                if (!Guid.TryParse(ea.Body.ToArray(), out var id))
+                if (!Guid.TryParse(rawMessage, out var id))
                 {
                     _logger.LogError(
-                        "Failed to process message. DeliveryTag={DeliveryTag}, Redelivered={Redelivered}",
+                        "Invalid message format. Expected GUID but received '{Payload}'. " +
+                        "DeliveryTag={DeliveryTag}, Redelivered={Redelivered}, Exchange={Exchange}, RoutingKey={RoutingKey}",
+                        rawMessage,
                         ea.DeliveryTag,
-                        ea.Redelivered
+                        ea.Redelivered,
+                        ea.Exchange,
+                        ea.RoutingKey
                     );
 
                     await channel.BasicNackAsync(
@@ -107,7 +105,7 @@ public class QueueConsumer(
         };
 
         var consumerTag = await channel.BasicConsumeAsync(
-            queueName,
+            QueueName.Jobs,
             autoAck: false,
             consumer,
             cancellationToken);

@@ -80,6 +80,7 @@ public static class DependencyInjection
             return factory.CreateConnectionAsync().GetAwaiter().GetResult();
         });
 
+        services.AddSingleton<IRabbitMqChannelFactory, RabbitMqChannelFactory>();
         services.AddScoped<IQueuePublisher, QueuePublisher>();
         services.AddScoped<IQueueConsumer, QueueConsumer>();
 

@@ -5,21 +5,13 @@ using RabbitMQ.Client;
 
 namespace JobQueue.Infrastructure.Messaging;
 
-public class QueuePublisher(IConnection connection) : IQueuePublisher
+public class QueuePublisher(IRabbitMqChannelFactory factory) : IQueuePublisher
 {
-    private readonly IConnection _connection = connection;
+    private readonly IRabbitMqChannelFactory _factory = factory;
 
     public async Task PublishJob(Guid id)
     {
-        const string queueName = "jobs";
-
-        using var channel = await _connection.CreateChannelAsync();
-
-        await channel.QueueDeclareAsync(queueName,
-            durable: true,
-            exclusive: false,
-            autoDelete: false,
-            null);
+        using var channel = await _factory.CreateConsumerChannel(QueueName.Jobs);
 
         var message = JsonSerializer.Serialize(new { Id = id });
         var props = new BasicProperties
@@ -32,7 +24,7 @@ public class QueuePublisher(IConnection connection) : IQueuePublisher
 
         await channel.BasicPublishAsync(
             "",
-            queueName,
+            QueueName.Jobs,
             mandatory: false,
             props,
             body
