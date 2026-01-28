@@ -22,6 +22,12 @@ public class ProcessJobHandler(
             return ProcessResult.NotFound;
         }
 
+        if (job.Status == JobStatus.Created)
+        {
+            _logger.LogWarning("Job {JobId} received but status is Created, ignoring", job.Id);
+            return ProcessResult.Retry;
+        }
+
         try
         {
             job.Process();

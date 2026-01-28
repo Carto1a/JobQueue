@@ -1,0 +1,20 @@
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+COPY JobQueue.Dispatcher/JobQueue.Dispatcher.csproj JobQueue.Dispatcher/
+COPY JobQueue.Application/JobQueue.Application.csproj JobQueue.Application/
+COPY JobQueue.Domain/JobQueue.Domain.csproj JobQueue.Domain/
+COPY JobQueue.Infrastructure/JobQueue.Infrastructure.csproj JobQueue.Infrastructure/
+
+RUN dotnet restore JobQueue.Dispatcher/JobQueue.Dispatcher.csproj
+
+COPY . .
+WORKDIR /src/JobQueue.Dispatcher
+RUN dotnet publish -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:10.0
+WORKDIR /app
+
+COPY --from=build /app/publish .
+
+ENTRYPOINT ["dotnet", "JobQueue.Dispatcher.dll"]
