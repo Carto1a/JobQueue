@@ -19,14 +19,24 @@ public class JobsController : ControllerBase
         return Accepted(nameof(GetById), new { id = result });
     }
 
-    public IActionResult List()
+    [HttpGet]
+    public async Task<IActionResult> List(
+        [FromServices] GetJobsQueryHandler handler,
+        CancellationToken cancellationToken
+    )
     {
-        throw new NotImplementedException();
+        var result = await handler.Handle(cancellationToken);
+        return Ok(result);
     }
 
     [HttpGet("{id:guid}")]
-    public IActionResult GetById(Guid id)
+    public async Task<IActionResult> GetById(
+        [FromServices] GetJobQueryHandler handler,
+        Guid id,
+        CancellationToken cancellationToken
+    )
     {
-        throw new NotImplementedException();
+        var result = await handler.Handle(id, cancellationToken);
+        return Ok(result);
     }
 }

@@ -9,6 +9,8 @@ public static class DependecyInjection
         services.AddScoped<CreateJobHandler>();
         services.AddScoped<DispatchPendingJobsHandler>();
         services.AddScoped<IProcessJobHandler, ProcessJobHandler>();
+        services.AddScoped<GetJobQueryHandler>();
+        services.AddScoped<GetJobsQueryHandler>();
 
         return services;
     }

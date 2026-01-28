@@ -60,6 +60,7 @@ public static class DependencyInjection
         services.AddSingleton<MongoInitializer>();
 
         services.AddScoped<IJobRepository, JobRepository>();
+        services.AddScoped<IQueries, Queries>();
 
         services.AddScoped<IJobProcessor, EmailJobProcessor>();
         services.AddScoped<IJobProcessor, ReportJobProcessor>();

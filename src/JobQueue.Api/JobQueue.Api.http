@@ -3,8 +3,18 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "jobType": 1,
+  "jobType": 0,
   "payload": "teste2"
 }
+
+###
+
+GET http://localhost:8081/jobs
+Accept: application/json
+
+###
+
+GET http://localhost:8081/jobs/3aa43d77-c2fb-4348-b0d0-c2b324db2cae
+Accept: application/json
 
 ###
