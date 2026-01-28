@@ -37,4 +37,19 @@ public class JobRepository(MongoDbContext context) : IJobRepository
 
         return result;
     }
+
+    public async Task<IReadOnlyList<Job>> GetJobsPendingDispatch(CancellationToken cancellationToken = default)
+    {
+        var filter = Builders<JobModel>.Filter.Eq(x => x.Status, JobStatus.Created);
+        var project = Builders<JobModel>.Projection.Expression(x => new Job(x.Id, x.JobType, x.Status, x.RetryCount, x.Payload, x.CreatedAt));
+
+        var jobs = await _collection
+            .Find(filter)
+            .SortBy(x => x.CreatedAt)
+            .Limit(100)
+            .Project(project)
+            .ToListAsync(cancellationToken);
+
+        return jobs;
+    }
 }

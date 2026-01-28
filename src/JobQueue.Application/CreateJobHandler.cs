@@ -25,6 +25,8 @@ public class CreateJobHandler(
         try
         {
             await _publisher.PublishJob(job.Id);
+            job.MarkAsPending();
+            await _repository.Update(job, CancellationToken.None);
         }
         catch (Exception exception)
         {

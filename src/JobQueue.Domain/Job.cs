@@ -21,7 +21,13 @@ public class Job
 
     public static Job Create(JobType jobType, string payload)
     {
-        return new Job(Guid.NewGuid(), jobType, JobStatus.Pending, 0, payload, DateTime.UtcNow);
+        return new Job(Guid.NewGuid(), jobType, JobStatus.Created, 0, payload, DateTime.UtcNow);
+    }
+
+    public void MarkAsPending()
+    {
+        EnsureStatus(JobStatus.Created);
+        Status = JobStatus.Pending;
     }
 
     public void Process()
