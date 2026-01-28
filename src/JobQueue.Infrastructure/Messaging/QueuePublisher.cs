@@ -4,9 +4,23 @@ using RabbitMQ.Client;
 
 namespace JobQueue.Infrastructure.Messaging;
 
-public class QueuePublisher(IRabbitMqChannelFactory factory) : IQueuePublisher
+public class QueuePublisher(IRabbitMqChannelFactory factory, IConnection connection) : IQueuePublisher
 {
     private readonly IRabbitMqChannelFactory _factory = factory;
+    private readonly IConnection _connection = connection;
+
+    public async Task<bool> IsHealthy(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            using var channel = await _connection.CreateChannelAsync();
+            return channel.IsOpen;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
     public async Task PublishJob(Guid id)
     {
