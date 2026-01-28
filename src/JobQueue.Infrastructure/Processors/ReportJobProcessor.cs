@@ -7,9 +7,14 @@ public class ReportJobProcessor : IJobProcessor
 {
     public JobType JobType => JobType.GenerateReport;
 
-    public Task Process(string payload, CancellationToken cancellationToken = default)
+    public async Task Process(string payload, CancellationToken cancellationToken = default)
     {
         var random = new Random();
-        return Task.Delay(random.Next(100, 2300));
+        await Task.Delay(random.Next(100, 10000));
+
+        if (random.NextDouble() < 0.3)
+        {
+            throw new Exception("Simulated random failure during job processing.");
+        }
     }
 }
