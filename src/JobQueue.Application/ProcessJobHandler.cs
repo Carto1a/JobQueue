@@ -26,12 +26,14 @@ public class ProcessJobHandler(
         {
             job.Process();
             await _repository.Update(job, cancellationToken);
+            _logger.LogInformation("Job {JobId} Processing", id);
 
             var processor = _resolver.Resolve(job.JobType);
             await processor.Process(job.Payload, cancellationToken);
 
             job.Complete();
             await _repository.Update(job, cancellationToken);
+            _logger.LogInformation("Job {JobId} Completed", id);
             return ProcessResult.Completed;
         }
         catch (OperationCanceledException)
