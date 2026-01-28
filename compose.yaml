@@ -24,6 +24,27 @@ services:
 
     # restart: unless-stopped
 
+  worker:
+    image: jobsqueue-worker
+    build:
+      context: ./src/
+      dockerfile: JobQueue.Worker/dockerfile
+    networks:
+      - jobs-network
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      MongoDb__ConnectionString: "mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@db:27017/${MONGO_DATABASE}?authSource=admin"
+      MongoDb__DatabaseName: ${MONGO_DATABASE}
+
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Port: 5672
+      RabbitMq__Username: ${RABBITMQ_USERNAME}
+      RabbitMq__Password: ${RABBITMQ_PASSWORD}
+
   rabbitmq:
     image: rabbitmq:management
     hostname: rabbitmq
