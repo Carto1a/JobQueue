@@ -17,8 +17,32 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.Configure<MongoDbSettings>(configuration.GetSection("MongoDb"));
-        services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMq"));
+        services.AddOptions<MongoDbSettings>()
+            .Bind(configuration.GetSection("MongoDb"))
+            .Validate(s =>
+                !string.IsNullOrWhiteSpace(s.ConnectionString),
+                "MongoDb:ConnectionString is required")
+            .Validate(s =>
+                !string.IsNullOrWhiteSpace(s.DatabaseName),
+                "MongoDb:DatabaseName is required")
+            .ValidateOnStart();
+
+        services.AddOptions<RabbitMqSettings>()
+            .Bind(configuration.GetSection("RabbitMq"))
+            .Validate(s =>
+                !string.IsNullOrWhiteSpace(s.Host),
+                "RabbitMq:Host is required")
+            .Validate(s => s.Port > 0 && s.Port <= 65535,
+                "RabbitMq:Port is invalid")
+            .Validate(s =>
+                !string.IsNullOrWhiteSpace(s.Username),
+                "RabbitMq:Username is required")
+            .Validate(s =>
+                !string.IsNullOrWhiteSpace(s.Password),
+                "RabbitMq:Password is required")
+            .Validate(s => s.DispatchConcurrency > 0,
+                "RabbitMq:DispatchConcurrency must be greater than 0")
+            .ValidateOnStart();
 
         services.AddSingleton(sp =>
         {
